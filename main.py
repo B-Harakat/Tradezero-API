@@ -4,20 +4,21 @@ from Tradezero_API import Tradezero_API
 
 zero = Tradezero_API()
 
-zero.login(usr_name="XXXXX",pass_word="xxxxxxx")
+# Opens a new window and logs in to the tradezero web free platform
+zero.login(usr_name="XXXXX",pass_word="xxxxxx")
 
 # Give time to load page
 # Adjust according to your internet speed 
-time.sleep(25)
+time.sleep(20)
 print("Ready for order")
 
+# submit-method
+zero.submit_order(ticker = "TSLA", quantity = 1, order_type = "Stop-LMT",price = 3000, sprice = 2500, action = "Sell")
 
-zero.submit_order(ticker = "DNN", quantity = 1, order_type = "Stop-LMT",price = 8.4, sprice = 7, action = "Sell")
+# cleans the input field, required between submissions
+zero.reset()
 
-# Above execution takes some time, hence this buffer before next order
-time.sleep(1)
-
-zero.submit_order(ticker = "DNN", quantity = 1, order_type = "Stop-LMT",price = 8.4, sprice = 7.3, action = "Sell")
+zero.submit_order(ticker = "TSLA", quantity = 1, order_type = "Stop-LMT",price = 6900, sprice = 4200, action = "Sell")
 
 print("Done!")
 
