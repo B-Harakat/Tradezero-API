@@ -77,7 +77,7 @@ zero.locate_short(ticker = "TSLA",quantity = 100)
 
 Looking through `Tradezero_API.py` you will find alot of time.sleep() calls, this is to account for the time it takes for the web page to load stuff inbetween our scripts, feel free to adjust these if you have faith in your internet speed and find the code execution slow. 
 
-Finally, I need to emphasize that this API is not meant HFT or scalping or anything requiring rapid order firing, use at your own risk.
+Finally, I need to emphasize that this API is not meant for HFT or scalping or anything requiring rapid order firing, use at your own risk.
 
 
 
