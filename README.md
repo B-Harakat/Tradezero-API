@@ -17,7 +17,8 @@
 
  If you don't have geckodriver already installed, set it up by downloading the latest tar from [here](https://github.com/mozilla/geckodriver/releases). 
  Change to the directory where the tar is located and type the following in the terminal
- ```tar -xvzf geckodriver*
+ ```
+    tar -xvzf geckodriver*
     chmod +x geckodriver
     sudo mv geckodriver /usr/local/bin
  ```
