@@ -44,7 +44,9 @@
  zero.submit_order(ticker = "TSLA", quantity = 1, order_type = "LMT",price = 100, sprice = 100, time_in_force = "DAY", action = "Buy")
 ```
 
-There is really only 2 methods you need to acquaint yourself with for this API, the first one : `zero.login(usr_name="XXX",pass_word="xxx")` takes in your tradezero account name and pass word. It will open up a new window and automatically logs in to ZeroFree with your account info.
+There is really only two methods you need to acquaint yourself with for this API, the first one : `zero.login(usr_name="XXX",pass_word="xxx")` takes in your tradezero account name and pass word. It will open up a new window and automatically logs in to ZeroFree with your account info.
+
+If you are uncomfortable with typing in account info as plain text you could try something like what [this redditor shared](https://www.reddit.com/r/Python/comments/3sx851/comment/cx1m0j3/?utm_source=share&utm_medium=web2x&context=3)
 
 The second method is fairly straight forward, you input the value you normally would do in the web platform, and it will submit the order placement 
 ```python
