@@ -1,8 +1,10 @@
 # Tradezero-API
- A simple script to interact with the Tradezero web platform through python. Right now it only allows for Buy/Sell but will add Short allocation and Short/Cover in the Future.
+ A simple script to interact with the Tradezero web platform through python using selenium. 
 
 ## Requirement
  **Python 3.6+**
+ **Stable internet**
+ **Have Selenium python set up on your computer**
 
 ## Set Up Selenium
  *Note: I am running this on ubuntu 20.04, if you are using another OS, following instructions may not apply to you*
@@ -23,6 +25,6 @@
     sudo mv geckodriver /usr/local/bin
  ```
 
- Now it should be working, insert your tradezero login info to `main.py` and run the file, a new window with the trading platform should be opened, along    with some boogey trade executions.
+ Now it should be working, insert your tradezero login info to `main.py` and run the file, a new window with the trading platform should be opened,you will be automatically logged in and some exemplary trades will be executed.
 
 
