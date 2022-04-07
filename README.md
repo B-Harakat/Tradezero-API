@@ -44,7 +44,7 @@
  zero.submit_order(ticker = "TSLA", quantity = 1, order_type = "LMT",price = 100, sprice = 100, time_in_force = "DAY", action = "Buy")
 ```
 
-There is really only 2 methods you need to acquiant yourself with for this API, the first one : `zero.login(usr_name="XXX",pass_word="xxx")` takes in your tradezero account name and pass word. It will open up a new window and automatically logs in to ZeroFree with your account info.
+There is really only 2 methods you need to acquaint yourself with for this API, the first one : `zero.login(usr_name="XXX",pass_word="xxx")` takes in your tradezero account name and pass word. It will open up a new window and automatically logs in to ZeroFree with your account info.
 
 The second method is fairly straight forward, you input the value you normally would do in the web platform, and it will submit the order placement 
 ```python
@@ -53,14 +53,15 @@ zero.submit_order(ticker, quantity , order_type, price = 0, sprice = 0, time_in_
 Compare it to the usual docker in the web platform
 ![alt text](https://github.com/Harakat-Bjorn/Tradezero-API/blob/main/Screenshot%20from%202022-04-07%2021-27-36.png "Tradezero web platform docker")
 
-*Note    : if value were assigned to **price** and **sprice** when they not relevant e.g. market buy/sell, they will be ignored.*
+*Note    : if value were assigned to **price** and **sprice** when they are not relevant e.g. market buy/sell, they will be ignored.*
 
 *Note.2  : order type includes all 7 default types i.e. MKT, LMT, Stop-MKT, Stop-LMT, MKT-Close,LMT-Close,Range. However, I do not recommend using order types of Stop-MKT/Stop-LMT with this API as they sometimes block other orders from being placed if executed poorly.* 
 
 The python script will interact with the window via reading from and wrting to the html/css elements of the website using selenium, it all happens in the back ground so you can do other stuff on the computer as long as the window is not closed.
 
 ## Short Locate
-This api has the capability of automatically locating shorts of hard-to-borrow stocks, no matter the cost, therefore use with caution.
+This api has the capability of automatically locating shorts of hard-to-borrow stocks, however, use this with caution as the locate will be executed no matter how much it will cost.
+
 To enable auto locate, simply set the `auto_locate` flag to `True`.
 
 ```python
