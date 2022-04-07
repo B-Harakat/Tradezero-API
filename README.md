@@ -6,9 +6,9 @@
  
  **Stable internet**
  
- **FireFox** *Google should work too but i recommend firefox since it's the browser I used for the developemtn*
+ **FireFox** *Google should work too but i recommend firefox since it's the browser I used for the developement*
  
- **Have Selenium python set up on your computer**
+ **Have Selenium-python set up on your computer**
  
  **A tradezero account** *We are going to use ZeroFree, the free basic web platform, no hotkeys needed (disable them if you've set it up previously)*
 
@@ -31,7 +31,7 @@
     sudo mv geckodriver /usr/local/bin
  ```
 
- Now it should be working, insert your tradezero login info to `main.py` and run the file, a new window with the trading platform should be opened,you will be automatically logged in and some exemplary trades will be executed.
+ Now it should be working, insert your tradezero login info to `main.py` and run the file, a new window of ZeroFree should be opened,you will be automatically logged in and some exemplary trades will be executed.
  
  ## Code Explained
  
@@ -71,6 +71,12 @@ To manually locate shorts,
 ```python
 zero.locate_short(ticker = "TSLA",quantity = 100)
 ```
+
+***One Last Note***
+
+Looking through `Tradezero_API.py` you will find alot of time.sleep() calls, this is to account for the time it takes for the web page to load stuff inbetween our scripts, feel free to adjust these if you have faith in your internet speed and find the code execution slow. 
+
+Finally, I need to emphasize that this API is not meant HFT or scalping or anything requiring rapid order firing, use at your own risk.
 
 
 
