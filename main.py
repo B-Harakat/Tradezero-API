@@ -2,25 +2,31 @@ import pyautogui
 import time
 from Tradezero_API import Tradezero_API
 
+
+print("Initiate!!")
+
 zero = Tradezero_API()
 
-# Opens a new window and logs in to the tradezero web free platform
-zero.login(usr_name="XXXXX",pass_word="xxxxxx")
+# Opens a new window and logs in to the tradezero web zero platform
+zero.login(usr_name="XXXXXX",pass_word="xxxxxx")
 
-# Give time to load page
-# Adjust according to your internet speed 
-time.sleep(20)
-print("Ready for order")
 
 # submit-method
-zero.submit_order(ticker = "TSLA", quantity = 1, order_type = "Stop-LMT",price = 3000, sprice = 2500, action = "Sell")
+zero.submit_order(ticker = "TSLA", quantity = 1, order_type = "LMT",price = 7000, sprice = 6500, time_in_force = "DAY", action = "Short")
 
 # cleans the input field, required between submissions
 zero.reset()
 
-zero.submit_order(ticker = "TSLA", quantity = 1, order_type = "Stop-LMT",price = 6900, sprice = 4200, action = "Sell")
 
-print("Done!")
+zero.submit_order(ticker = "DNN", quantity = 1, order_type = "LMT",price = 6900, sprice = 4200, time_in_force = "DAY", action = "Short")
+
+
+
+
+# time.sleep(0.5)
+
+# zero.locate_short(ticker="DNN", quantity=100)
+
 
 
 
