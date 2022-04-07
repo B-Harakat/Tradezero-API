@@ -8,6 +8,12 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import math
 
+from datetime import datetime
+
+from pytz import timezone
+
+
+
 class Tradezero_API():
 
 
@@ -38,6 +44,26 @@ class Tradezero_API():
 			print("Connection Timed Out")
 		time.sleep(5)
 
+	def get_time(self):
+
+		# Allocating, shorting and covering available 6am to 8pm EST (<--- not ET)
+
+		# eastern = timezone('US/Eastern')
+		eastern = timezone('EST')
+
+		loc_dt = datetime.now(eastern)
+
+		split_date_time = str(loc_dt).split(" ")
+		split_time = split_date_time[1].split(":")
+		split_time.insert(0,datetime.today().weekday())
+
+
+		time_now = split_time[:3]
+
+		# Returns a list of ['weekday', 'hr', 'minute']
+		return time_now
+
+
 	def set_ticker(self, ticker):
 
 		if type(ticker) != str:
@@ -62,6 +88,8 @@ class Tradezero_API():
 		price = round(price, 2)
 		sprice = round(sprice, 2)
 
+		# I do not recommend using Stop-MKT or Stop-LMT cause they may block other trades from executing on tradezero
+		# Besides we can program our own stop-mkt/lmt trade using live data from somewhere else.
 		types = ["MKT","LMT","Stop-MKT", "Stop-LMT", "MKT-Close", "LMT-Close", "Range"]
 
 		if order_type in types:
@@ -118,15 +146,18 @@ class Tradezero_API():
 
 
 
+###### SHORT & COVER #######
+
+
 	def get_short_status(self, ticker):
 		
 		status = self.driver.find_element_by_id("trading-order-locate-status").text
-		print(f"short status of {ticker} is : {status} \n")
+		
 		return status
 		
 
 
-
+	# Main function for locating shorts
 	def locate_short(self, ticker, quantity = 100):
 			
 		try:
@@ -156,51 +187,136 @@ class Tradezero_API():
 			time.sleep(0.1)
 
 			try:
-				WebDriverWait(self.driver, 2).until(EC.presence_of_element_located((By.CLASS_NAME, "icon-box.icon-box-accept")))
+				WebDriverWait(self.driver, 4).until(EC.presence_of_element_located((By.CLASS_NAME, "icon-box.icon-box-accept")))
 				time.sleep(0.1)
 			except:
 				print("cant find green")
 
-			self.driver.find_element_by_class_name("icon-box.icon-box-cancel").click()
+			self.driver.find_element_by_class_name("icon-box.icon-box-accept").click()
 		except:
 			print(f"Couldn't locate short of {ticker}")
 
+
+
+	def cancel_locate(self):
+		try:
+			WebDriverWait(self.driver, 2.5).until(EC.element_to_be_clickable((By.ID, "short-locate-button-cancel")))
+			time.sleep(0.5)
+			self.driver.find_element_by_id("short-locate-button-cancel").click()
+			print("Cancelled locate")
+		except:
+			pass
+
+
 	def reset_short_locate_info(self):
-		self.driver.find_element_by_id("short-list-input-symbol").clear()
-		self.driver.find_element_by_id("short-list-input-shares").clear()
+		try:
+			self.driver.find_element_by_id("short-list-input-symbol").clear()
+		except:
+			pass
+
+		try:
+			self.driver.find_element_by_id("short-list-input-shares").clear()
+		except:
+			pass
 
 
 
+######### GENERAL METHODS  ##########
 
 
-	def submit_order(self,ticker, quantity, order_type, price=0, sprice=0, time_in_force="DAY", action=None):
+	def submit_order(self,ticker, quantity, order_type, price=0, sprice=0, time_in_force="DAY", action=None , auto_locate = False):
+		
+		# Check if it is the weekends
+		if self.get_time()[0] == 5 or self.get_time()[0] == 6:
+			pass
 
-		self.set_ticker(ticker)
-		time.sleep(2)
-		self.set_quantity(quantity)
-		time.sleep(0.25)
-		self.set_type_and_price(order_type, price, sprice)
-		time.sleep(0.01)
-		self.set_tif(time_in_force)
-		time.sleep(0.01)
+		else:
+			self.set_ticker(ticker)
+			time.sleep(2)
+			self.set_quantity(quantity)
+			time.sleep(0.25)
+			self.set_type_and_price(order_type, price, sprice)
+			time.sleep(0.25)
+			self.set_tif(time_in_force)
+			time.sleep(0.25)
 
-		if action.lower() == "short":
-			if self.get_short_status(ticker) != "S":
-				short_quantity = int(math.ceil(float(quantity/100))) * 100
+			if auto_locate == True:
 
-				self.locate_short(ticker, short_quantity)
-				time.sleep(0.2)
-				self.reset_short_locate_info()
+				if action.lower() == "short" and int(self.get_time()[1])>=6 and int(self.get_time()[1])<=20:
 
-		time.sleep(0.25)
-		self.set_action(action)
-		time.sleep(0.5)
+					# Incase the ticker is hard-to-borrow and we need to locate shorts
+					if "S" not in self.get_short_status(ticker):
+
+						# round quantity to the nearest hundreds
+						short_quantity = int(math.ceil(float(quantity/100))) * 100
+						
+						# locate it and reset the input field
+						self.locate_short(ticker, short_quantity)
+						time.sleep(0.25)
+						self.reset_short_locate_info()
+						time.sleep(0.25)
+
+						self.set_action(action)
+						time.sleep(0.25)
+
+					# Incase the ticker is hard-to-borrow and we already located some shorts
+					elif "/" in self.get_short_status(ticker):
+
+						# Check if quantity is more than available short locates, if not, locate more
+						available_shorts = self.get_short_status(ticker).strip("S( )")
+						available_shorts = available_shorts.split("/")
+						available_shorts = int(available_shorts[0])
+
+						if available_shorts >= quantity:
+							self.set_action(action)
+							time.sleep(0.25)
+
+						elif available_shorts < quantity:
+							
+							short_quantity = int(math.ceil(float((quantity-available_shorts)/100))) * 100
+							self.locate_short(ticker, short_quantity)
+							time.sleep(0.25)
+							self.reset_short_locate_info()
+							time.sleep(0.25)
+
+							self.set_action(action)
+							time.sleep(0.25)
+							
+
+					# Incase the ticker is easy-to-borrow
+					elif "S" in self.get_short_status(ticker):
+						self.set_action(action)
+						time.sleep(0.25)
+
+
+				elif action.lower() in ["short", "cover"]:
+					print(f"Shorting and Covering only allowed between 6am and 8pm EST, current time = {self.get_time()[1:]}\n")
+
+				else:
+					self.set_action(action)
+					time.sleep(0.25)
+
+
+			else:
+				self.set_action(action)
+				time.sleep(0.25)
+
+				# To close the pop-up window that appears when you try to short without enough allocates
+				# Will do nothing if there is no pop-up window i.e. we have enough shorts allocated
+				if action.lower() == "short":
+
+					self.cancel_locate()
+					time.sleep(0.25)
+
+
+			
 
 
 
 	def reset(self):
 		self.driver.find_element_by_id("trading-order-input-quantity").clear()
 
+		# Incase the price fields on tradezero is unavailable, e.g. when the order type is MKT
 		try:
 			self.driver.find_element_by_id("trading-order-input-price").clear()
 		except:
