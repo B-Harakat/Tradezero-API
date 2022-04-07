@@ -20,8 +20,8 @@
  ```tar -xvzf geckodriver*
     chmod +x geckodriver
     sudo mv geckodriver /usr/local/bin
-    ```
+ ```
 
- Now it should be working, insert your tradezero login info to `main.py` and run the file, a new window with the trading platform should be opened, along with some boogey trade executions.
+ Now it should be working, insert your tradezero login info to `main.py` and run the file, a new window with the trading platform should be opened, along    with some boogey trade executions.
 
 
