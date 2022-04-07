@@ -9,7 +9,6 @@ import time
 import math
 
 from datetime import datetime
-
 from pytz import timezone
 
 
@@ -200,10 +199,9 @@ class Tradezero_API():
 
 	def cancel_locate(self):
 		try:
-			WebDriverWait(self.driver, 2.5).until(EC.element_to_be_clickable((By.ID, "short-locate-button-cancel")))
+			WebDriverWait(self.driver, 4).until(EC.element_to_be_clickable((By.ID, "short-locate-button-cancel")))
 			time.sleep(0.5)
 			self.driver.find_element_by_id("short-locate-button-cancel").click()
-			print("Cancelled locate")
 		except:
 			pass
 
@@ -222,6 +220,25 @@ class Tradezero_API():
 
 
 ######### GENERAL METHODS  ##########
+
+	# Cleans the input fields
+	def reset(self):
+
+		self.driver.find_element_by_id("trading-order-input-quantity").clear()
+
+		# Incase the price fields on tradezero is unavailable, e.g. when the order type is MKT
+		try:
+			self.driver.find_element_by_id("trading-order-input-price").clear()
+		except:
+			pass
+
+		try:
+			self.driver.find_element_by_id("trading-order-input-sprice").clear()
+		except:
+			pass
+
+		self.driver.find_element_by_xpath(f"/html/body/div[3]/section[1]/div[1]/div[2]/div/div[8]/span[2]/select/option[1]").click()
+
 
 
 	def submit_order(self,ticker, quantity, order_type, price=0, sprice=0, time_in_force="DAY", action=None , auto_locate = False):
@@ -306,28 +323,19 @@ class Tradezero_API():
 				if action.lower() == "short":
 
 					self.cancel_locate()
-					time.sleep(0.25)
+					print(f"Not enough shares allocated to execute the short, auto locate is turned off, cancelled locate of {ticker}")
+					time.sleep(1)
+
+		self.reset()
+		time.sleep(0.25)
+
+
 
 
 			
 
 
 
-	def reset(self):
-		self.driver.find_element_by_id("trading-order-input-quantity").clear()
-
-		# Incase the price fields on tradezero is unavailable, e.g. when the order type is MKT
-		try:
-			self.driver.find_element_by_id("trading-order-input-price").clear()
-		except:
-			pass
-
-		try:
-			self.driver.find_element_by_id("trading-order-input-sprice").clear()
-		except:
-			pass
-
-		self.driver.find_element_by_xpath(f"/html/body/div[3]/section[1]/div[1]/div[2]/div/div[8]/span[2]/select/option[1]").click()
 
 	
 
