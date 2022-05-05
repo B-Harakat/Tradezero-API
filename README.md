@@ -102,7 +102,7 @@ The `fee_limit` argument lets you set a threshold for the short locate fee, if t
 If you want to check the locate fee of a specific stock without placing an order, use `fee = zero.get_locate_fee(ticker,quantity)`
 
 ### Near-Market Limit Order
-Added a custom order type: `order_type = NM-LMT`. When set, it will place a limit order at the bid/ask price (*depending on if you are going long or short*) + the `offset` value. Barring slow internet, it takes roughly 0.3 second between the bid/ask price being read and the order being placed, so not as fool proof as a market order during times of high volatility, use with caution. 
+Added a custom order type: `order_type = NM-LMT`. When set, it will place a limit order at the bid/ask price (*depending on if you are going long or short*) + the `offset` value. 
 
 ### Additional Features
 ```python
@@ -114,8 +114,12 @@ Returns a pandas dataframe of all the stocks you hold along with its information
 ```python
 zero.cancel_all_orders()
 ```
-Cancels all active orders. Does so sequentially so might take a while if there are many orders. 
+Cancels all active orders. Does so sequentially so might take a while if there are many orders.
 
+```python
+my_money = zero.get_funds()
+```
+Returns available funds (Equity - Exposure), does not account for available leverage.
 
 
 
