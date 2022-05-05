@@ -59,7 +59,7 @@ Compare it to the usual docker in the web platform
 
 *Note.2  : order type includes all 7 default types i.e. MKT, LMT, Stop-MKT, Stop-LMT, MKT-Close,LMT-Close,Range. However, I do not recommend using order types of Stop-MKT/Stop-LMT with this API as they sometimes block other orders from being placed if executed poorly.* 
 
-The python script will interact with the window via reading from and wrting to the html/css elements of the website using selenium, it all happens in the back ground so you can do other stuff on the computer as long as the window is not closed.
+The python script will interact with the window via reading from and wrting to the html/css elements of the website using selenium, it all happens in the back ground so you can do other stuff on the computer as long as the window is not closed. *Update: not relevant if started in headless mode, since there'll be no window to close.
 
 ## Short Locate
 This api has the capability of automatically locating shorts of hard-to-borrow stocks, however, use this with caution as the locate will be executed no matter how much it will cost. *Update: No longer the case, see below*
