@@ -97,7 +97,7 @@ The full list of positional arguments of `submit_order()` has been updated to
 zero.submit_order(ticker, quantity , order_type, price = 0, sprice = 0,offset=0, time_in_force = "DAY", action = None, auto_locate=False, fee_limit=1E+6)
 ```
 ### Fee Limit
-The `fee_limit` argument lets you set a threshold for the short locate fee, if the locate fee is above this limit it will not go through.
+The `fee_limit` argument lets you set a threshold for the short locate fee, if the locate fee is above this limit then the order execution is halted and nothing happens.
 
 If you want to check the locate fee of a specific stock without placing an order, use `fee = zero.get_locate_fee(ticker,quantity)`
 
