@@ -154,14 +154,14 @@ class Tradezero_API():
 			self.driver.find_element_by_xpath(f"/html/body/div[3]/section[1]/div[1]/div[2]/div/div[5]/span[2]/select/option[2]").click()
 
 			if action.lower() in ["sell", "short"]: 
-				price = self.get_bid()+offset
+				price = self.get_ask()+offset
 				if price > 0:
 					self.driver.find_element_by_id("trading-order-input-price").send_keys(str(price))
 				else:
 					print(f"Error. Negative price input.")
 
 			elif action.lower() in ["buy", "cover"]: 
-				price = self.get_ask()+offset
+				price = self.get_bid()+offset
 				if price > 0:
 					self.driver.find_element_by_id("trading-order-input-price").send_keys(str(price))
 				else:
@@ -502,7 +502,7 @@ class Tradezero_API():
 					time.sleep(1)
 
 		else:
-			print(f"Time is {hr}:{self.get_time[2]}, market not open.")
+			print(f"Time is {hr}:{self.get_time()[2]}, market not open.")
 
 		time.sleep(0.25)
 		self.reset()
