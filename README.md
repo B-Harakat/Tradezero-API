@@ -84,21 +84,27 @@ Finally, I need to emphasize that this API is not meant for HFT or scalping or a
 
 
 
-##Update 5/5/2022
+## Update 5/5/2022
+
+Headless start is now an option.
+```python
+zero = Tradezero_API(headless=True)
+```
+This way no visual browser tab will appear.
 
 The full list of positional arguments of `submit_order()` has been updated to
 ```python
 zero.submit_order(ticker, quantity , order_type, price = 0, sprice = 0,offset=0, time_in_force = "DAY", action = None, auto_locate=False, fee_limit=1E+6)
 ```
-###Fee Limit
+### Fee Limit
 The `fee_limit` argument lets you set a threshold for the short locate fee, if the locate fee is above this limit it will not go through.
 
 If you want to check the locate fee of a specific stock without placing an order, use `fee = zero.get_locate_fee(ticker,quantity)`
 
-###Near-Market Limit Order
+### Near-Market Limit Order
 Added a custom order type: `order_type = NM-LMT`. When set, it will place a limit order at the bid/ask price (*depending on if you are going long or short*) + the `offset` value. Barring slow internet, it takes roughly 0.3 second between the bid/ask price being read and the order being placed, so not as fool proof as a market order during times of high volatility, use with caution. 
 
-###Additional Features
+### Additional Features
 ```python
 df = zero.get_positions(ticker=None)
 ```
