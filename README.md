@@ -123,7 +123,7 @@ Returns available funds (Equity - Exposure), does not account for available leve
 
 
 ### Paper Trading Features
-Added Paper trading for testing purposes (mostly for shorting). Simulates a short order and returns a list of trading data including execution price and real-time short-locate fee without placing an actual order.
+Added Paper trading for testing purposes (currently exlcusive for shorting HTB stocks). Simulates a short order and returns a list of trading data including execution price and real-time short-locate fee without placing an actual order.
 
 
 
